@@ -6,11 +6,25 @@ use Graph::Writer;
 use vars qw(@ISA);
 @ISA = qw(Graph::Writer);
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
-# GraphViz Parameters
+# Global GraphViz Parameters
 my %graph_param;
-my @param_keys = qw/format layout ranksep shape fontsize arrowsize/;
+my %edge_param;
+my %node_param;
+
+my @param_keys = qw/format layout ranksep
+		    no_overlap concentrate epsilon ratio
+		    splines shape fontsize
+		    /;
+
+my @edge_keys = qw/color arrowsize minlen weight fontsize fontname fontcolor
+		   color style dir tailclip headclip arrowhead arrowtail
+		   labeldistance port_label_distance decorateP samehead sametail
+		   constraint /;
+
+my @node_keys = qw/color height width shape fontsize fontname color fillcolor
+		   style/;
 
 sub _init  {
     my ($self,%param) = @_;
@@ -19,16 +33,27 @@ sub _init  {
 	$graph_param{$_} = $param{"-$_"}
 	    if(defined $param{"-$_"});
     }
+
+    for(@edge_keys) {
+	$edge_param{$_} = $param{"-edge_$_"} if defined $param{"-edge_$_"};
+    }
+
+    for(@node_keys) {
+	$node_param{$_} = $param{"-node_$_"} if defined $param{"-node_$_"};
+    }
+
     $graph_param{format} ||= 'png';
+    $edge_param{color} ||= 'black';
+    $node_param{color} ||= 'black';
 }
 
 sub _write_graph {
     my ($self, $graph, $FILE) = @_;
     my $grvz = $self->graph2graphviz($graph);
     my $as_fmt = 'as_' . $graph_param{format};
-    if(ref($FILE) eq 'IO::All') {
+    if(ref($FILE) =~ '^IO::All') {
 	my $f = $grvz->$as_fmt;
-	$FILE->append($f);
+	$f > $FILE;
     } else {
 	$grvz->$as_fmt($FILE);
     }
@@ -37,7 +62,9 @@ sub _write_graph {
 sub graph2graphviz {
     my ($self,$g) = @_;
     $graph_param{directed} = $g->directed;
-    my $r = GraphViz->new(%graph_param);
+    my $r = GraphViz->new(%graph_param,
+			  node => \%node_param,
+			  edge => \%edge_param);
     $self->add_nodes($r,$g);
     $self->add_edges($r,$g);
     return $r;
@@ -85,7 +112,6 @@ Graph::Writer::GraphViz - GraphViz Writer for Graph object
 
 =head1 SYNOPSIS
 
-
   my @v = qw/Alice Bob Crude Dr/;
   my $g = Graph->new(@v);
 
@@ -100,6 +126,8 @@ Graph::Writer::GraphViz - GraphViz Writer for Graph object
 	-layout => 'twopi',
 	-ranksep => 1.5,
 	-fontsize => 8
+        -edge_color => 'grey',
+        -node_color => 'black',
        )->write_graph($g,'/tmp/graph.png');
 
 =head1 DESCRIPTION
