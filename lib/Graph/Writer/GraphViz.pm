@@ -5,7 +5,7 @@ use Graph::Writer;
 use vars qw(@ISA);
 @ISA = qw(Graph::Writer);
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 my $format = 'png';
 
@@ -26,9 +26,17 @@ sub graph2graphviz {
     my ($self,$g) = @_;
     my $r = GraphViz->new(directed=>$g->directed);
     my @v = $g->vertices;
-    my @e = $g->edges;
     $r->add_node($_) for @v;
-    $r->add_edge(@e[2*$_,2*$_+1]) for 0..@e/2-1;
+    my @e = $g->edges;
+    for my $i (0 .. @e/2-1) {
+	my ($a,$b) = @e[2*$i , 2*$i + 1];
+	if($g->has_attribute('weight',$a,$b)) {
+	    my $w = $g->get_attribute('weight',$a,$b);
+	    $r->add_edge($a,$b,label=>$w);
+	} else {
+	    $r->add_edge($a,$b);
+	}
+    }
     return $r;
 }
 
