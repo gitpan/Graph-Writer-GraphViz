@@ -6,7 +6,7 @@ use Graph::Writer;
 use vars qw(@ISA);
 @ISA = qw(Graph::Writer);
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 # Global GraphViz Parameters
 my %graph_param;
@@ -74,12 +74,12 @@ sub graph2graphviz {
 sub add_edges {
     my ($self,$r,$g) = @_;
     my @e = $g->edges;
-    for my $i (0 .. @e/2-1) {
-	my ($a,$b) = @e[2*$i , 2*$i + 1];
+    for (@e) {
+        my ($a,$b) = @$_;
 	my %param;
 	if($g->has_edge_weight($a,$b)) {
 	    my $w = $g->get_edge_weight($a,$b);
-	    $param{label} = $w;
+	    $param{weight} = $w;
 	}
 	$r->add_edge($a,$b,%param);
     }
@@ -91,8 +91,8 @@ sub add_nodes {
     for (@v) {
 	my %param;
         for my $attr (qw/style shape label color fillcolor rank cluster/) {
-            if($g->has_graph_attribute($attr,$_)) {
-                my $w = $g->get_graph_attribute($attr,$_);
+            if($g->has_vertex_attribute($attr,$_)) {
+                my $w = $g->get_vertex_attribute($attr,$_);
                 $param{$attr} = $w;
             }
         }
