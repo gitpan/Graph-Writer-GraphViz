@@ -6,7 +6,7 @@ abstract        ('Use GraphViz to render Graph.');
 author          ('Kang-min Liu (gugod@gugod.org)');
 license         ('perl');
 version_from    ('lib/Graph/Writer/GraphViz.pm');
-requires        ('IO::All');
+requires        ('IO::All' => 0.23);
 requires        ('GraphViz');
 requires        ('Graph::Writer');
 

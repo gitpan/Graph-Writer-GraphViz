@@ -1,11 +1,12 @@
 package Graph::Writer::GraphViz;
 use strict;
+use IO::All;
 use GraphViz;
 use Graph::Writer;
 use vars qw(@ISA);
 @ISA = qw(Graph::Writer);
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 my $format = 'png';
 
@@ -19,7 +20,12 @@ sub _write_graph {
     my ($self, $graph, $FILE) = @_;
     my $grvz = $self->graph2graphviz($graph);
     my $as_fmt = 'as_' . $format;
-    $grvz->$as_fmt($FILE);
+    if(ref($FILE) eq 'IO::All') {
+	my $f = $grvz->$as_fmt;
+	$FILE->append($f);
+    } else {
+	$grvz->$as_fmt($FILE);
+    }
 }
 
 sub graph2graphviz {
