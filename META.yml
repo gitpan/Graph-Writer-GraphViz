@@ -1,5 +1,5 @@
 name: Graph-Writer-GraphViz
-version: 0.04
+version: 0.05
 abstract: Use GraphViz to render Graph.
 author: Kang-min Liu (gugod@gugod.org)
 license: perl

@@ -6,7 +6,7 @@ use Graph::Writer;
 use vars qw(@ISA);
 @ISA = qw(Graph::Writer);
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 # GraphViz Parameters
 my %graph_param;
@@ -65,6 +65,10 @@ sub add_nodes {
 	if($g->has_attribute('shape',$_)) {
 	    my $w = $g->get_attribute('shape',$_);
 	    $param{shape} = $w;
+	}
+	if($g->has_attribute('label',$_)) {
+	    my $w = $g->get_attribute('label',$_);
+	    $param{label} = $w;
 	}
 	$r->add_node($_,%param) ;
     }
