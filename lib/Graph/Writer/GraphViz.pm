@@ -6,7 +6,7 @@ use Graph::Writer;
 use vars qw(@ISA);
 @ISA = qw(Graph::Writer);
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 # Global GraphViz Parameters
 my %graph_param;
@@ -152,6 +152,11 @@ system, like, 'gif' if you have 'as_gif', 'text' if you can do
 =head1 SEE ALSO
 
 L<Graph>, L<Graph::Writer>, L<GraphViz>
+
+=head1 CREDITS
+
+Thanks for RURBAN@cpan.org for noticing tests failure on different
+platforms.
 
 =head1 COPYRIGHT
 
