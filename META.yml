@@ -1,14 +1,15 @@
 name: Graph-Writer-GraphViz
-version: 0.06
+version: 0.07
 abstract: Use GraphViz to render Graph.
 author: Kang-min Liu (gugod@gugod.org)
 license: perl
 distribution_type: module
 requires:
   IO::All: 0.3
-  GraphViz: 0
+  GraphViz: 2.02
+  Graph: 0.54
   Graph::Writer: 0
 no_index:
   directory:
     - inc
-generated_by: Module::Install version 0.35
+generated_by: Module::Install version 0.36

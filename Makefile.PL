@@ -7,7 +7,8 @@ author          ('Kang-min Liu (gugod@gugod.org)');
 license         ('perl');
 version_from    ('lib/Graph/Writer/GraphViz.pm');
 requires        ('IO::All' => 0.30);
-requires        ('GraphViz');
+requires        (GraphViz => 2.02);
+requires        (Graph => 0.54);
 requires        ('Graph::Writer');
 
 &WriteAll;

@@ -6,16 +6,17 @@ use Graph::Writer;
 use vars qw(@ISA);
 @ISA = qw(Graph::Writer);
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 # Global GraphViz Parameters
 my %graph_param;
 my %edge_param;
 my %node_param;
 
-my @param_keys = qw/format layout ranksep
+my @param_keys = qw/format layout ranksep rankdir
 		    no_overlap concentrate epsilon ratio
-		    splines shape fontsize
+		    splines shape fontsize fontcolor overlap
+                    directed
 		    /;
 
 my @edge_keys = qw/color arrowsize minlen weight fontsize fontname fontcolor
@@ -23,8 +24,8 @@ my @edge_keys = qw/color arrowsize minlen weight fontsize fontname fontcolor
 		   labeldistance port_label_distance decorateP samehead sametail
 		   constraint /;
 
-my @node_keys = qw/color height width shape fontsize fontname color fillcolor
-		   style/;
+my @node_keys = qw/color height width shape fontsize fontname
+		   fontcolor color fillcolor style rank/;
 
 sub _init  {
     my ($self,%param) = @_;
@@ -76,8 +77,8 @@ sub add_edges {
     for my $i (0 .. @e/2-1) {
 	my ($a,$b) = @e[2*$i , 2*$i + 1];
 	my %param;
-	if($g->has_attribute('weight',$a,$b)) {
-	    my $w = $g->get_attribute('weight',$a,$b);
+	if($g->has_edge_weight($a,$b)) {
+	    my $w = $g->get_edge_weight($a,$b);
 	    $param{label} = $w;
 	}
 	$r->add_edge($a,$b,%param);
@@ -89,14 +90,12 @@ sub add_nodes {
     my @v = $g->vertices;
     for (@v) {
 	my %param;
-	if($g->has_attribute('shape',$_)) {
-	    my $w = $g->get_attribute('shape',$_);
-	    $param{shape} = $w;
-	}
-	if($g->has_attribute('label',$_)) {
-	    my $w = $g->get_attribute('label',$_);
-	    $param{label} = $w;
-	}
+        for my $attr (qw/style shape label color fillcolor rank cluster/) {
+            if($g->has_graph_attribute($attr,$_)) {
+                my $w = $g->get_graph_attribute($attr,$_);
+                $param{$attr} = $w;
+            }
+        }
 	$r->add_node($_,%param) ;
     }
     return $r;
