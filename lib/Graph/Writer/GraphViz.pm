@@ -6,7 +6,7 @@ use Graph::Writer;
 use vars qw(@ISA);
 @ISA = qw(Graph::Writer);
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
 # Global GraphViz Parameters
 my %graph_param;
@@ -91,8 +91,8 @@ sub add_nodes {
     for (@v) {
 	my %param;
         for my $attr (qw/style shape label color fillcolor rank cluster/) {
-            if($g->has_vertex_attribute($attr,$_)) {
-                my $w = $g->get_vertex_attribute($attr,$_);
+            if($g->has_vertex_attribute($_,$attr)) {
+                my $w = $g->get_vertex_attribute($_,$attr);
                 $param{$attr} = $w;
             }
         }
