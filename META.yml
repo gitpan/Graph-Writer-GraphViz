@@ -1,15 +1,27 @@
-name: Graph-Writer-GraphViz
-version: 0.10
-abstract: Use GraphViz to render Graph.
-author: Kang-min Liu (gugod@gugod.org)
-license: perl
+---
+abstract: 'Use GraphViz to render Graph.'
+author:
+  - 'Kang-min Liu (gugod@gugod.org)'
+build_requires:
+  ExtUtils::MakeMaker: 6.42
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
 distribution_type: module
-requires:
-  IO::All: 0.3
-  GraphViz: 2.02
-  Graph: 0.54
-  Graph::Writer: 0
+generated_by: 'Module::Install version 1.01'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Graph-Writer-GraphViz
 no_index:
   directory:
     - inc
-generated_by: Module::Install version 0.36
+    - t
+requires:
+  Graph: 0.54
+  Graph::Writer: 0
+  GraphViz: 2.02
+  IO::All: 0.3
+resources:
+  license: http://dev.perl.org/licenses/
+version: 0.11
